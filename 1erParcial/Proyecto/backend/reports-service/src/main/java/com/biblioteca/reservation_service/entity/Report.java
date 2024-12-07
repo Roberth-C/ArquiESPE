@@ -13,24 +13,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "reservations")
-public class Reservation {
+@Table(name = "reports")
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private String reportType;
 
     @Column(nullable = false)
-    private Long bookId;
+    private LocalDate generatedDate;
 
     @Column(nullable = false)
-    private LocalDate reservationDate;
+    private String generatedBy;
 
-    @Column(nullable = false)
-    private LocalDate expirationDate;
-
-    private boolean canceled;
+    @Column
+    private String filePath;
 }

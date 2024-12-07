@@ -15,28 +15,49 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    // Obtener todos los libros
-    public List<BookDto> getAllBooks() {
-        return bookRepository.findAll().stream()
-                .map(BookDto::fromEntity)
-                .collect(Collectors.toList());
+    // Crear un nuevo libro
+    public Book createBook(Book book) {
+        return bookRepository.save(book);
     }
 
-    // Agregar un libro
-    public BookDto addBook(BookDto bookDto) {
-        // Convertir BookDto a entidad Book
-        Book book = BookDto.toEntity(bookDto);
-
-        // Guardar en la base de datos
-        Book savedBook = bookRepository.save(book);
-
-        // Convertir Book a BookDto para la respuesta
-        return BookDto.fromEntity(savedBook);
+    // Obtener un libro por ID
+    public Optional<Book> getBookById(Long id) {
+        return bookRepository.findById(id);
     }
 
-    // Verificar disponibilidad de un libro por título
-    public boolean isBookAvailable(String title) {
-        Book book = bookRepository.findByTitle(title);
-        return book != null && book.isAvailable();
+    // Listar todos los libros
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    // Buscar libros por título
+    public List<Book> searchBooksByTitle(String title) {
+        return bookRepository.findByTitleContaining(title);
+    }
+
+    // Filtrar libros por categoría
+    public List<Book> filterBooksByCategory(String category) {
+        return bookRepository.findByCategory(category);
+    }
+
+    // Actualizar la información de un libro
+    public Book updateBook(Long id, Book bookDetails) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            Book updatedBook = book.get();
+            updatedBook.setTitle(bookDetails.getTitle());
+            updatedBook.setAuthor(bookDetails.getAuthor());
+            updatedBook.setCategory(bookDetails.getCategory());
+            updatedBook.setQuantity(bookDetails.getQuantity());
+            updatedBook.setLocation(bookDetails.getLocation());
+            updatedBook.setAvailable(bookDetails.getAvailable());
+            return bookRepository.save(updatedBook);
+        }
+        return null;
+    }
+
+    // Eliminar un libro
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
     }
 }

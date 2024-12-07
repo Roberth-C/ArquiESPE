@@ -20,11 +20,13 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(nullable = false)
-    private Long bookId;
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
 
     @Column(nullable = false)
     private LocalDate loanDate;
@@ -32,5 +34,12 @@ public class Loan {
     @Column(nullable = false)
     private LocalDate dueDate;
 
-    private boolean returned;
+    @Column
+    private LocalDate returnDate;
+
+    @Column(nullable = false)
+    private Boolean returned;
+
+    @Column
+    private Double fine; // Multa por retrasos
 }

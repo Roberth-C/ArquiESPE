@@ -18,12 +18,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String name;
-
     @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String email;
 
-    @Column(length = 20)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserType userType; // Ejemplo: ADMIN, STUDENT, TEACHER
+
+    @Column(nullable = false)
+    private Boolean status; // true = activo, false = suspendido
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Loan> loans; // Historial de préstamos
 }

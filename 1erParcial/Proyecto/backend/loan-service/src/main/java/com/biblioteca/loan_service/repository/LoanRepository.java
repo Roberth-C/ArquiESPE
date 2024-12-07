@@ -7,6 +7,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LoanRepository extends JpaRepository<Loan, Long> {
-    List<Loan> findByUserIdAndReturnedFalse(Long userId);
+public interface ReportRepository extends JpaRepository<Report, Long> {
+
+    // Buscar reportes por tipo (inventario, préstamos, etc.)
+    List<Report> findByReportType(String reportType);
+
+    // Buscar reportes generados por un usuario específico
+    List<Report> findByGeneratedBy(String generatedBy);
+
+    // Buscar reportes generados dentro de un rango de fechas
+    List<Report> findByGeneratedDateBetween(LocalDate startDate, LocalDate endDate);
 }

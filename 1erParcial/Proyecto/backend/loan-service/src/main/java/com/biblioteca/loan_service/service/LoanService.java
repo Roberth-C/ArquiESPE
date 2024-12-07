@@ -16,31 +16,33 @@ public class LoanService {
     @Autowired
     private LoanRepository loanRepository;
 
-    public List<LoanDto> getActiveLoans(Long userId) {
-        return loanRepository.findByUserIdAndReturnedFalse(userId).stream()
-                .map(loan -> new LoanDto(loan.getId(), loan.getUserId(), loan.getBookId(),
-                        loan.getLoanDate(), loan.getDueDate(), loan.isReturned()))
-                .collect(Collectors.toList());
+    // Registrar un préstamo
+    public Loan createLoan(Loan loan) {
+        loan.setLoanDate(LocalDate.now());
+        loan.setDueDate(LocalDate.now().plusDays(14)); // Ejemplo: 2 semanas de préstamo
+        loan.setReturned(false);
+        return loanRepository.save(loan);
     }
 
-    public LoanDto registerLoan(LoanDto loanDto) {
-        Loan loan = Loan.builder()
-                .userId(loanDto.getUserId())
-                .bookId(loanDto.getBookId())
-                .loanDate(LocalDate.now())
-                .dueDate(LocalDate.now().plusDays(14))
-                .returned(false)
-                .build();
-        Loan savedLoan = loanRepository.save(loan);
-        return new LoanDto(savedLoan.getId(), savedLoan.getUserId(), savedLoan.getBookId(),
-                savedLoan.getLoanDate(), savedLoan.getDueDate(), savedLoan.isReturned());
+    // Registrar una devolución
+    public Loan returnLoan(Long id) {
+        Optional<Loan> loan = loanRepository.findById(id);
+        if (loan.isPresent()) {
+            Loan updatedLoan = loan.get();
+            updatedLoan.setReturned(true);
+            updatedLoan.setReturnDate(LocalDate.now());
+            return loanRepository.save(updatedLoan);
+        }
+        return null;
     }
 
-    public LoanDto registerReturn(Long loanId) {
-        Loan loan = loanRepository.findById(loanId).orElseThrow(() -> new RuntimeException("Loan not found"));
-        loan.setReturned(true);
-        Loan updatedLoan = loanRepository.save(loan);
-        return new LoanDto(updatedLoan.getId(), updatedLoan.getUserId(), updatedLoan.getBookId(),
-                updatedLoan.getLoanDate(), updatedLoan.getDueDate(), updatedLoan.isReturned());
+    // Obtener préstamos activos
+    public List<Loan> getActiveLoans() {
+        return loanRepository.findByReturnedFalse();
+    }
+
+    // Obtener el historial de préstamos de un usuario
+    public List<Loan> getLoanHistoryByUserId(Long userId) {
+        return loanRepository.findByUserIdAndReturnedTrue(userId);
     }
 }

@@ -18,15 +18,27 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, unique = true)
+    private String isbn;
+
+    @Column(nullable = false)
     private String category;
 
     @Column(nullable = false)
-    private boolean available;
+    private Boolean available;
+
+    @Column(nullable = false)
+    private String location; // Ubicación en la biblioteca
+
+    @Column(nullable = false)
+    private Integer quantity; // Cantidad en inventario
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Loan> loans; // Historial de préstamos relacionados
 }

@@ -15,19 +15,44 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(user -> new UserDto(user.getId(), user.getName(), user.getEmail(), user.getRole()))
-                .collect(Collectors.toList());
+    @Autowired
+    private RoleRepository roleRepository;
+
+    // Crear un nuevo usuario
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 
-    public UserDto addUser(UserDto userDto) {
-        User user = User.builder()
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .role(userDto.getRole())
-                .build();
-        User savedUser = userRepository.save(user);
-        return new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getRole());
+    // Obtener un usuario por ID
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    // Obtener todos los usuarios
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // Obtener usuarios por tipo
+    public List<User> getUsersByType(String userType) {
+        return userRepository.findByUserType(userType);
+    }
+
+    // Suspender usuario
+    public void suspendUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(u -> {
+            u.setStatus(false);
+            userRepository.save(u);
+        });
+    }
+
+    // Reactivar usuario
+    public void activateUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(u -> {
+            u.setStatus(true);
+            userRepository.save(u);
+        });
     }
 }
