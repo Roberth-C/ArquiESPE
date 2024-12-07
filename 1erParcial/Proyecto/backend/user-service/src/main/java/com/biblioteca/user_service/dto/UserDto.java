@@ -5,11 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDto {
+public class UserDTO {
     private Long id;
-    private String name;
+    private String username;
     private String email;
-    private String role;
+    private String userType; // Ejemplo: ADMIN, STUDENT, TEACHER
+    private Boolean status; // true = activo, false = suspendido
 }

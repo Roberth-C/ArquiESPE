@@ -1,22 +1,18 @@
 package com.biblioteca.user_service.service;
 
-import com.biblioteca.user_service.dto.UserDto;
 import com.biblioteca.user_service.entity.User;
 import com.biblioteca.user_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     // Crear un nuevo usuario
     public User createUser(User user) {
@@ -47,6 +43,17 @@ public class UserService {
         });
     }
 
+    public void addLoanToUser(Long userId, Long loanId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.getLoanIds().add(loanId); // Agregar el ID del préstamo a la lista
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado con el ID proporcionado.");
+        }
+    }
+    
     // Reactivar usuario
     public void activateUser(Long id) {
         Optional<User> user = userRepository.findById(id);

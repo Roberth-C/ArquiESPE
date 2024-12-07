@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +37,16 @@ public class User {
     @Column(nullable = false)
     private Boolean status; // true = activo, false = suspendido
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Loan> loans; // Historial de préstamos
+    // Campo que almacena IDs de préstamos como referencia
+    @ElementCollection
+    private List<Long> loanIds = new ArrayList<>();
+
+    // Getters y Setters
+    public List<Long> getLoanIds() {
+        return loanIds;
+    }
+
+    public void setLoanIds(List<Long> loanIds) {
+        this.loanIds = loanIds;
+    }
 }

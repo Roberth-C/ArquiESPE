@@ -7,27 +7,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/reservations")
-public class ReservationController {
+@RequestMapping("/api/reports")
+public class ReportController {
 
     @Autowired
-    private ReservationService reservationService;
+    private ReportService reportService;
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ReservationDto>> getActiveReservations(@PathVariable Long userId) {
-        return ResponseEntity.ok(reservationService.getActiveReservations(userId));
+    // Obtener todos los reportes por tipo
+    @GetMapping
+    public List<ReportDTO> getReportsByType(@RequestParam String type) {
+        return reportService.getReportsByType(type).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    // Crear un reporte
     @PostMapping
-    public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) {
-        return ResponseEntity.ok(reservationService.createReservation(reservationDto));
+    public ReportDTO createReport(@RequestBody Report report) {
+        return convertToDTO(reportService.createReport(report));
     }
 
-    @DeleteMapping("/{reservationId}")
-    public ResponseEntity<Void> cancelReservation(@PathVariable Long reservationId) {
-        reservationService.cancelReservation(reservationId);
-        return ResponseEntity.noContent().build();
+    // Convertir entidad a DTO
+    private ReportDTO convertToDTO(Report report) {
+        ReportDTO dto = new ReportDTO();
+        dto.setId(report.getId());
+        dto.setReportType(report.getReportType());
+        dto.setGeneratedDate(report.getGeneratedDate());
+        dto.setGeneratedBy(report.getGeneratedBy());
+        dto.setFilePath(report.getFilePath());
+        return dto;
     }
 }

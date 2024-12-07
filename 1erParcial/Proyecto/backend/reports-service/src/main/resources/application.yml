@@ -1,12 +1,21 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/reservation_service
-    username: postgres
-    password: admin1234
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8084
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reports_service
+    username: postgres
+    password: admin1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Crea la base de datos y actualiza las tablas si no existen
+    show-sql: true     # Mostrar las consultas SQL en la consola
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  application:
+    name: reports-service
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework: info

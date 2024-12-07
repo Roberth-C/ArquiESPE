@@ -7,13 +7,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ReservationDto {
     private Long id;
-    private Long userId;
-    private Long bookId;
-    private LocalDate reservationDate;
-    private LocalDate expirationDate;
-    private boolean canceled;
+    private String reportType; // Tipo de reporte: inventario, préstamos activos, historial de usuarios
+    private LocalDate generatedDate;
+    private String generatedBy; // Usuario que generó el reporte
+    private String filePath; // Ubicación del archivo generado
 }

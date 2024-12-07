@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoanDto {
     private Long id;
-    private Long userId;
-    private Long bookId;
+    private Long userId; // ID del usuario que realizó el préstamo
+    private Long bookId; // ID del libro prestado
+    private String bookTitle; // Título del libro prestado
     private LocalDate loanDate;
     private LocalDate dueDate;
-    private boolean returned;
+    private LocalDate returnDate;
+    private Boolean returned; // true = devuelto, false = pendiente
+    private Double fine; // Multa por retraso, si aplica
 }

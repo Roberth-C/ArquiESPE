@@ -1,87 +1,67 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  api-gateway:
+  postgres-db:
     build:
-      context: ./gateway  # Ruta donde se encuentra el Dockerfile del API Gateway
-      dockerfile: Dockerfile
+      context: ./database
+    container_name: postgres-container
     ports:
-      - "8080:8080"  # Puerto del API Gateway
-    depends_on:
-      - user-service
-      - book-service
-      - loan-service
-      - reservation-service
-    networks:
-      - biblioteca-network
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   user-service:
     build:
-      context: ./backend/user-service  # Ruta donde se encuentra el Dockerfile del user-service
-      dockerfile: Dockerfile
+      context: ./backend/user-service
+    container_name: user-service
     ports:
-      - "8081:8080"  # Puerto del user-service
-    networks:
-      - biblioteca-network
+      - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/user_service
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin1234
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/users_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres-db
 
   book-service:
     build:
-      context: ./backend/book-service  # Ruta donde se encuentra el Dockerfile del book-service
-      dockerfile: Dockerfile
+      context: ./backend/book-service
+    container_name: book-service
     ports:
-      - "8082:8082"  # Puerto del book-service
-    networks:
-      - biblioteca-network
+      - "8082:8082"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/book_service
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin1234
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/books_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres-db
 
   loan-service:
     build:
-      context: ./backend/loan-service  # Ruta donde se encuentra el Dockerfile del loan-service
-      dockerfile: Dockerfile
+      context: ./backend/loan-service
+    container_name: loan-service
     ports:
-      - "8083:8083"  # Puerto del loan-service
-    networks:
-      - biblioteca-network
+      - "8083:8083"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/loan_service
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin1234
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/loans_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres-db
 
-  reservation-service:
+  reports-service:
     build:
-      context: ./backend/reservation-service  # Ruta donde se encuentra el Dockerfile del reservation-service
-      dockerfile: Dockerfile
+      context: ./backend/reports-service
+    container_name: reports-service
     ports:
-      - "8084:8084"  # Puerto del reservation-service
-    networks:
-      - biblioteca-network
+      - "8084:8084"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/reservation_service
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=admin1234
-
-  db:
-    image: postgres:15  # Imagen de PostgreSQL
-    container_name: biblioteca_db
-    ports:
-      - "5432:5432"  # Puerto del servicio de base de datos
-    networks:
-      - biblioteca-network
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin1234
-    volumes:
-      - postgres-data:/var/lib/postgresql/data  # Volumen para persistir datos
-
-networks:
-  biblioteca-network:  # Red compartida entre los servicios
-
-volumes:
-  postgres-data:  # Volumen para persistencia de la base de datos
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/reports_service
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - postgres-db
