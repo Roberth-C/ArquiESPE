@@ -11,4 +11,6 @@ public class BookDTO {
     private String categoryName;
     private boolean available;
     private Integer availableQuantity; // Cantidad disponible para reservas
+    private Long librarianId; // ID del bibliotecario que ingresó el libro
+    private String location; // Ubicación física del libro en la biblioteca
 }

@@ -36,6 +36,9 @@ public class Book {
     @Column
     private String location; // Ubicación en la biblioteca (opcional)
 
-    @Column
+    @Column(nullable = false)
     private Integer year; // Año de publicación
+
+    @Column(nullable = false)
+    private Long librarianId; // ID del bibliotecario que registró el libro
 }

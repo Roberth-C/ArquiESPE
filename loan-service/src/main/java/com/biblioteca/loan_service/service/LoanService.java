@@ -3,9 +3,7 @@ package com.biblioteca.loan_service.service;
 import com.biblioteca.loan_service.dto.LoanDTO;
 import com.biblioteca.loan_service.entity.Loan;
 import com.biblioteca.loan_service.repository.LoanRepository;
-
 import lombok.Builder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -34,7 +32,6 @@ public class LoanService {
         void updateAvailableQuantity(@PathVariable("bookId") Long bookId, @RequestParam("change") int change);
     }
 
-    // Registrar un préstamo
     public LoanDTO registerLoan(LoanDTO loanDTO) {
         Loan loan = Loan.builder()
                 .bookId(loanDTO.getBookId())
@@ -47,7 +44,6 @@ public class LoanService {
         return convertToDTO(savedLoan);
     }
 
-    // Renovar préstamo
     public LoanDTO renewLoan(Long loanId, LocalDate newDueDate) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new IllegalArgumentException("Préstamo no encontrado con ID: " + loanId));
@@ -56,28 +52,24 @@ public class LoanService {
         return convertToDTO(updatedLoan);
     }
 
-    // Obtener todos los préstamos
     public List<LoanDTO> getAllLoans() {
         return loanRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Obtener préstamos activos
     public List<LoanDTO> getActiveLoans() {
         return loanRepository.findByStatus("ACTIVE").stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Historial de préstamos por usuario
     public List<LoanDTO> getLoanHistoryByUser(Long userId) {
         return loanRepository.findByUserId(userId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Historial de préstamos por libro
     public List<LoanDTO> getLoanHistoryByBook(Long bookId) {
         return loanRepository.findByBookId(bookId).stream()
                 .map(this::convertToDTO)
@@ -95,9 +87,7 @@ public class LoanService {
                 .build();
     }
 
-    // Reservar un libro
     public LoanDTO reserveBook(LoanDTO loanDTO) {
-        // Llamar al servicio de libros para disminuir la cantidad disponible
         bookClient.updateAvailableQuantity(loanDTO.getBookId(), -1);
 
         Loan loan = Loan.builder()
@@ -112,7 +102,6 @@ public class LoanService {
         return convertToDTO(savedLoan);
     }
 
-    // Devolver un libro
     public LoanDTO returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new IllegalArgumentException("Préstamo no encontrado con ID: " + loanId));
@@ -124,10 +113,8 @@ public class LoanService {
         loan.setStatus("RETURNED");
         Loan updatedLoan = loanRepository.save(loan);
 
-        // Llamar al servicio de libros para aumentar la cantidad disponible
         bookClient.updateAvailableQuantity(loan.getBookId(), 1);
 
         return convertToDTO(updatedLoan);
     }
-
 }

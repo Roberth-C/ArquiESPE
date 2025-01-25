@@ -11,6 +11,8 @@ public class LoanDTO {
     private Long id;             // Para respuestas
     private Long bookId;         // Para solicitudes y respuestas
     private Long userId;         // Para solicitudes y respuestas
+    private String bookTitle;    // Agregado para mejorar visualización
+    private String userName;     // Agregado para mejorar visualización
     private LocalDate loanDate;  // Para respuestas (generado automáticamente)
     private LocalDate dueDate;   // Para solicitudes y respuestas
     private LocalDate returnDate; // Para respuestas (nulo en solicitudes)

@@ -1,10 +1,6 @@
 package com.biblioteca.user_service.entity;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +19,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
-    private Integer role; // 1: Admin, 2: Estudiante, 3: Profesor
+    private Integer role; // 1: Admin, 2: Bibliotecario, 3: Estudiante
     @Column(nullable = false)
     private Boolean status; // true = habilitado, false = suspendido
 }

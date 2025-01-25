@@ -3,6 +3,8 @@ package com.biblioteca.book_service.controller;
 import com.biblioteca.book_service.entity.Book;
 import com.biblioteca.book_service.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,10 +65,17 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    // Registrar un nuevo libro
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        return ResponseEntity.ok(bookService.addBook(book));
+    public ResponseEntity<?> addBook(@RequestBody Book book) {
+        try {
+            Book savedBook = bookService.addBook(book);
+            return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>("Error: el libro no se puede duplicar o hay un error de integridad de datos.",
+                    HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error interno del servidor", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // Actualizar un libro existente
