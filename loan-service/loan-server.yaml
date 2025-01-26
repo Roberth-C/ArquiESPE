@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loan-server
+  template:
+    metadata:
+      labels:
+        app: loan-server
+    spec:
+      containers:
+      - name: loan-server
+        image: johny4473/loan-server:latest
+        ports:
+        - containerPort: 8083 # Puerto del contenedor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loan-server
+spec:
+  selector:
+    app: loan-server
+  ports:
+  - protocol: TCP
+    port: 8083
+    targetPort: 8083
+  type: ClusterIP

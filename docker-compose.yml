@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  eureka-server:
+    image: johny4473/eureka-server:1.0
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    image: johny4473/api-gateway:1.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  user-service:
+    image: johny4473/user-service:1.0
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+
+  book-service:
+    image: johny4473/book-service:1.0
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+
+  loan-service:
+    image: johny4473/loan-service:1.0
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+
+  frontend:
+    image: johny4473/frontend:1.0
+    ports:
+      - "80:80"

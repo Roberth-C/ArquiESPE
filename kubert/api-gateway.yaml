@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: johny4473/api-gateway:1.0
+        ports:
+        - containerPort: 8080 # Puerto del contenedor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  selector:
+    app: api-gateway
+  ports:
+  - protocol: TCP
+    port: 80        # Puerto público para acceder desde fuera del clúster
+    targetPort: 8080
+  type: LoadBalancer # Expuesto públicamente

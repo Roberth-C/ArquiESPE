@@ -25,7 +25,7 @@ public class LoanService {
     @Autowired
     private BookClient bookClient;
 
-    @FeignClient(name = "book-service", url = "http://localhost:8080/api/books")
+    @FeignClient(name = "book-service", url = "http://loan-service:8080/api/books")
     public interface BookClient {
 
         @PutMapping("/{bookId}/update-quantity")
@@ -105,7 +105,7 @@ public class LoanService {
     public LoanDTO returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new IllegalArgumentException("Préstamo no encontrado con ID: " + loanId));
-
+    
         if (!"RESERVED".equals(loan.getStatus()) && !"ACTIVE".equals(loan.getStatus())) {
             throw new IllegalArgumentException("Solo se pueden devolver préstamos activos o reservados.");
         }
@@ -114,6 +114,8 @@ public class LoanService {
         Loan updatedLoan = loanRepository.save(loan);
 
         bookClient.updateAvailableQuantity(loan.getBookId(), 1);
+
+        loanRepository.delete(loan);
 
         return convertToDTO(updatedLoan);
     }

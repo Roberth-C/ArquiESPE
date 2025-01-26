@@ -1,13 +1,5 @@
-# Etapa 1: Construcción del proyecto
-FROM maven:3.9.5-eclipse-temurin-21 AS build
+FROM openjdk:21-jdk-slim
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-# Etapa 2: Creación de la imagen final
-FROM eclipse-temurin:21-jdk
-WORKDIR /app
-COPY --from=build /app/target/book-service-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8082
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY target/*.jar eureka-server.jar
+EXPOSE 8761
+ENTRYPOINT ["java", "-jar", "eureka-server.jar"]

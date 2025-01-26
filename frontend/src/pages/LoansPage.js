@@ -17,7 +17,7 @@ const LoansPage = () => {
 
   const fetchActiveLoans = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/loans/active");
+      const response = await axios.get("http://frontend:8080/api/loans/active");
       setActiveLoans(response.data);
     } catch (error) {
       console.error("Error fetching active loans:", error);
@@ -27,7 +27,7 @@ const LoansPage = () => {
   const registerLoan = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/loans", newLoan);
+      const response = await axios.post("http://frontend:8080/api/loans", newLoan);
       alert("Préstamo registrado con éxito");
       fetchActiveLoans();
       setNewLoan({ bookId: "", userId: "", dueDate: "" });
@@ -38,7 +38,7 @@ const LoansPage = () => {
 
   const returnBook = async (loanId) => {
     try {
-      await axios.put(`http://localhost:8080/api/loans/${loanId}/return`);
+      await axios.put(`http://frontend:8080/api/loans/${loanId}/return`);
       alert("Devolución registrada con éxito");
       fetchActiveLoans();
     } catch (error) {
@@ -50,8 +50,8 @@ const LoansPage = () => {
     try {
       const endpoint =
         filterType === "user"
-          ? `http://localhost:8080/api/loans/history/user/${userId}`
-          : `http://localhost:8080/api/loans/history/book/${bookId}`;
+          ? `http://frontend:8080/api/loans/history/user/${userId}`
+          : `http://frontend:8080/api/loans/history/book/${bookId}`;
       const response = await axios.get(endpoint);
       setHistory(response.data);
     } catch (error) {
