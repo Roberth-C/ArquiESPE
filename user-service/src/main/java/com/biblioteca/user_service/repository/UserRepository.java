@@ -23,6 +23,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Buscar todos los usuarios habilitados
     List<User> findByStatus(Boolean status);
 
+    // Verifica si un usuario con el ID institucional existe
+    boolean existsByIdInstitucional(String idInstitucional);
+
+
     Optional<User> findByUsername(String username);
 
 }

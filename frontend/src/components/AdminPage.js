@@ -29,6 +29,7 @@ function AdminPage() {
     }
   };
 
+  // Definición de handleDelete para eliminar un usuario
   const handleDelete = async (idInstitucional) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
       try {
@@ -49,18 +50,7 @@ function AdminPage() {
     }
   };
   
-
-  /* const handleDelete = async (idInstitucional) => {
-    try {
-      await deleteUser(idInstitucional);
-      fetchUsers(); // Refresca la lista después de eliminar el usuario
-    } catch (error) {
-      console.error('Error al eliminar el usuario:', error.message);
-    }
-  }; */
-
-
-
+  //Definiendo handleSelectUser para seleccionar un usuario
   const handleSelectUser = (idInstitucional) => {
     const user = users.find(user => user.idInstitucional === idInstitucional);
     if (user) {
@@ -89,21 +79,35 @@ function AdminPage() {
     }
   };
 
+// Definición de handleFormSubmit para guardar un usuario en la base de datos o actualizarlo
   const handleFormSubmit = async () => {
     if (!formData.username || !formData.password || !formData.role || !formData.idInstitucional) {
       alert('Todos los campos son obligatorios.');
       return;
     }
-
+  
     try {
       if (selectedUserId) {
-        await updateUser(selectedUserId, formData); // Assuming updateUser takes an ID and formData
+        await updateUser(formData.idInstitucional, formData);
       } else {
         await createUser(formData);
       }
-      fetchUsers(); // Refresh the list of users
-      setFormData({ username: '', password: '', role: '', idInstitucional: '', status: true });
-      setSelectedUserId(null); // Clear the selected user after update
+  
+      // 🔹 Recargar la lista de usuarios
+      fetchUsers();
+  
+      // 🔹 Limpiar el formulario completamente
+      setFormData({ 
+        username: '', 
+        password: '', 
+        role: '', 
+        idInstitucional: '',  // 🔹 Ahora también limpia el ID Institucional
+        status: true 
+      });
+  
+      setSearchTerm(''); // 🔹 Limpia la búsqueda
+      setSelectedUserId(null); // 🔹 Deselecciona usuario
+  
     } catch (error) {
       console.error('Error al guardar el usuario:', error.message);
     }
