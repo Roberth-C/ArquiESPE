@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllUsers, createUser, updateUser, suspendUser, activateUser } from '../services/userService';
+import { getAllUsers, createUser, updateUser, suspendUser, activateUser, deleteUser } from '../services/userService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminPage.css';
 
@@ -28,6 +28,16 @@ function AdminPage() {
       console.error('Error al obtener los usuarios:', error.message);
     }
   };
+
+  const handleDelete = async (idInstitucional) => {
+    try {
+      await deleteUser(idInstitucional);
+      fetchUsers(); // Refresca la lista después de eliminar el usuario
+    } catch (error) {
+      console.error('Error al eliminar el usuario:', error.message);
+    }
+  };
+
 
 
   const handleSelectUser = (idInstitucional) => {
@@ -132,7 +142,13 @@ function AdminPage() {
                         onClick={() => handleSuspendActivate(user)}
                         className={`btn ${user.status ? 'btn-warning' : 'btn-success'}`}
                       >
-                        {user.status ? 'Suspender' : 'Activar'}
+                        {user.status ? 'Susper' : 'Activar'}
+                      </button>
+                      <button
+                        onClick={() => handleDelete(user.idInstitucional)}
+                        className="btn btn-danger"
+                      >
+                        Eliminar
                       </button>
                     </td>
                   </tr>

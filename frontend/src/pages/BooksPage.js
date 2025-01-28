@@ -14,7 +14,7 @@ const BooksPage = () => {
 
     const fetchBooks = async () => {
         try {
-            const response = await axios.get('http://frontend:8080/api/books');
+            const response = await axios.get('http://localhost:8080/api/books');
             setBooks(response.data);
         } catch (error) {
             console.error('Error fetching books:', error);
@@ -23,7 +23,7 @@ const BooksPage = () => {
 
     const handleFilter = async () => {
         try {
-            const response = await axios.get('http://frontend:8080/api/books/filter', {
+            const response = await axios.get('http://localhost:8080/api/books/filter', {
                 params: filters
             });
             setBooks(response.data);
@@ -34,7 +34,7 @@ const BooksPage = () => {
 
     const handleSave = async () => {
         try {
-            await axios.put(`http://frontend:8080/api/books/${editingBook.id}`, editingBook);
+            await axios.put(`http://localhost:8080/api/books/${editingBook.id}`, editingBook);
             setEditingBook(null);
             fetchBooks();
         } catch (error) {
@@ -44,7 +44,7 @@ const BooksPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://frontend:8080/api/books/${id}`);
+            await axios.delete(`http://localhost:8080/api/books/${id}`);
             fetchBooks();
         } catch (error) {
             console.error('Error deleting book:', error);
@@ -53,7 +53,7 @@ const BooksPage = () => {
 
     const handleRegister = async (book) => {
         try {
-            await axios.post('http://frontend:8080/api/books', book);
+            await axios.post('http://localhost:8080/api/books', book);
             setNewBook(false);
             fetchBooks();
         } catch (error) {

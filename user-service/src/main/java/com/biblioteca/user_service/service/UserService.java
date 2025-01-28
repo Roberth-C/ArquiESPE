@@ -3,7 +3,10 @@ package com.biblioteca.user_service.service;
 import com.biblioteca.user_service.entity.User;
 import com.biblioteca.user_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +15,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     // Registrar un usuario
     public User createUser(User user) {
@@ -40,6 +46,17 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public void deleteUserByIdInstitucional(String idInstitucional) {
+        userRepository.findByIdInstitucional(idInstitucional).ifPresent(userRepository::delete);
+    }
+
+    @DeleteMapping("/{idInstitucional}")
+    public ResponseEntity<?> deleteUser(@PathVariable String idInstitucional) {
+        userService.deleteUserByIdInstitucional(idInstitucional);
+        return ResponseEntity.ok().build();
+    }
+
 
     // Obtener usuarios por rol
     public List<User> getUsersByRole(Integer role) {

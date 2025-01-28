@@ -18,7 +18,7 @@ function StudentPage() {
 
   const fetchBooks = async () => {
     try {
-      const response = await axios.get('http://frontend:8080/api/books'); // URL del servicio de libros
+      const response = await axios.get('http://localhost:8080/api/books'); // URL del servicio de libros
       setBooks(response.data);
       setFilteredBooks(response.data);
     } catch (error) {
@@ -28,7 +28,7 @@ function StudentPage() {
 
   const fetchReservedBooks = async () => {
     try {
-      const response = await axios.get(`http://frontend:8080/api/loans/history/user/${userId}`); // URL del historial de préstamos
+      const response = await axios.get(`http://localhost:8080/api/loans/history/user/${userId}`); // URL del historial de préstamos
       setReservedBooks(response.data);
     } catch (error) {
       console.error('Error al obtener los libros reservados:', error.message);
@@ -57,7 +57,7 @@ function StudentPage() {
         userId,
         dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split('T')[0], // 14 días después
       };
-      await axios.post('http://frontend:8080/api/loans/reserve', loanData); // URL del servicio de préstamos
+      await axios.post('http://localhost:8080/api/loans/reserve', loanData); // URL del servicio de préstamos
       alert('Libro reservado con éxito.');
       fetchBooks(); // Actualiza la lista de libros
       fetchReservedBooks(); // Actualiza la lista de reservados
@@ -69,7 +69,7 @@ function StudentPage() {
 
   const handleReturn = async (loanId) => {
     try {
-      await axios.put(`http://frontend:8080/api/loans/${loanId}/return`); // Endpoint para devolver un libro
+      await axios.put(`http://localhost:8080/api/loans/${loanId}/return`); // Endpoint para devolver un libro
       alert('Libro devuelto con éxito.');
       fetchBooks(); // Actualiza la lista de libros disponibles
       fetchReservedBooks(); // Actualiza la lista de reservados

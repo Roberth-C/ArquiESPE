@@ -21,4 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByStatus(Boolean status);
 
     Optional<User> findByUsername(String username);
+
 }

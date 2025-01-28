@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://frontend:8080/api/users';
+const API_URL = 'http://localhost:8080/api/users';
 
 export const getAllUsers = async () => {
   const username = localStorage.getItem('username'); // Recupera el username almacenado
@@ -14,6 +14,22 @@ export const getAllUsers = async () => {
   return response.data;
 };
 
+
+export const deleteUser = async (idInstitucional) => {
+  const username = localStorage.getItem('username');
+  if (!username) {
+    throw new Error('El usuario no está autenticado.');
+  }
+
+  try {
+    await axios.delete(`${API_URL}/${idInstitucional}`, {
+      headers: { username },
+    });
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error.response ? error.response.data : 'No hay respuesta del servidor');
+    throw error;
+  }
+};
 
 
 
