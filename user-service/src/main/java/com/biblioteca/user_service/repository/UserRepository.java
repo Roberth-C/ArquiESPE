@@ -13,6 +13,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Buscar por ID institucional
     Optional<User> findByIdInstitucional(String idInstitucional);
+
+    // Eliminar por ID institucional
+    void deleteByIdInstitucional(String idInstitucional);
     
     // Buscar usuarios por rol
     List<User> findByRole(Integer role);
@@ -23,3 +26,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
 }
+

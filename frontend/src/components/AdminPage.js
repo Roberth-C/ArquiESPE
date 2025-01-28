@@ -30,13 +30,34 @@ function AdminPage() {
   };
 
   const handleDelete = async (idInstitucional) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+      try {
+        const response = await fetch(`http://localhost:8081/api/users/${idInstitucional}`, {
+          method: "DELETE",
+        });
+  
+        if (response.ok) {
+          alert("Usuario eliminado con éxito");
+          // Actualiza la lista de usuarios en la UI
+          setUsers(users.filter(user => user.idInstitucional !== idInstitucional));
+        } else {
+          alert("Error al eliminar el usuario");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  
+
+  /* const handleDelete = async (idInstitucional) => {
     try {
       await deleteUser(idInstitucional);
       fetchUsers(); // Refresca la lista después de eliminar el usuario
     } catch (error) {
       console.error('Error al eliminar el usuario:', error.message);
     }
-  };
+  }; */
 
 
 

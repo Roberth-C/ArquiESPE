@@ -47,16 +47,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void deleteUserByIdInstitucional(String idInstitucional) {
-        userRepository.findByIdInstitucional(idInstitucional).ifPresent(userRepository::delete);
-    }
-
-    @DeleteMapping("/{idInstitucional}")
-    public ResponseEntity<?> deleteUser(@PathVariable String idInstitucional) {
-        this.deleteUserByIdInstitucional(idInstitucional);
-        return ResponseEntity.ok().build();
-    }
-
+   // Eliminar usuario por ID institucional
+   public void deleteUserByIdInstitucional(String idInstitucional) {
+    userRepository.findByIdInstitucional(idInstitucional)
+            .ifPresent(userRepository::delete);
+}
 
     // Obtener usuarios por rol
     public List<User> getUsersByRole(Integer role) {
@@ -88,4 +83,9 @@ public class UserService {
         user.setStatus(true); // Activar usuario
         userRepository.save(user);
     }
+
+    
+
+
+
 }
