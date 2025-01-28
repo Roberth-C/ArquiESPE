@@ -16,8 +16,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+/*     @Autowired
+    private UserService userService; */
 
     // Registrar un usuario
     public User createUser(User user) {
@@ -53,7 +53,7 @@ public class UserService {
 
     @DeleteMapping("/{idInstitucional}")
     public ResponseEntity<?> deleteUser(@PathVariable String idInstitucional) {
-        userService.deleteUserByIdInstitucional(idInstitucional);
+        this.deleteUserByIdInstitucional(idInstitucional);
         return ResponseEntity.ok().build();
     }
 
