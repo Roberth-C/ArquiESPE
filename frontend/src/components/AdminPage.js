@@ -163,19 +163,23 @@ function AdminPage() {
                     <td>{user.role}</td>
                     <td>{user.status ? 'Activo' : 'Suspendido'}</td>
                     <td>
-                      <button
-                        onClick={() => handleSuspendActivate(user)}
-                        className={`btn ${user.status ? 'btn-warning' : 'btn-success'}`}
-                      >
-                        {user.status ? 'Susper' : 'Activar'}
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user.idInstitucional)}
-                        className="btn btn-danger"
-                      >
-                        Eliminar
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          onClick={() => handleSuspendActivate(user)}
+                          className={`btn ${user.status ? 'btn-warning' : 'btn-success'}`}
+                        >
+                          <i className="bi bi-pause"></i> {user.status ? 'Suspender' : 'Activar'}
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(user.idInstitucional)}
+                          className="btn btn-danger"
+                        >
+                          <i className="bi bi-trash"></i> Eliminar
+                        </button>
+                      </div>
                     </td>
+
                   </tr>
                 ))}
               </tbody>
