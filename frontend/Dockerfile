@@ -1,12 +1,7 @@
-#Dockerfile for frontend
-FROM node:18-alpine AS build
+# Dockerfile para frontend
+FROM node:20
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
 COPY . .
+RUN npm install
 RUN npm run build
-
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]

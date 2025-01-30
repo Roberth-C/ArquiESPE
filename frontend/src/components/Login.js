@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
-import '../pages/LoginPage.css';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -13,8 +12,8 @@ function Login() {
     e.preventDefault();
     try {
       const role = await login(username, password);
-      localStorage.setItem('username', username);
-      localStorage.setItem('role', role);
+      localStorage.setItem('username', username); // Guarda el username en localStorage
+      localStorage.setItem('role', role); // Guarda el rol en localStorage
       if (role === 'ADMIN') navigate('/admin');
       else if (role === 'LIBRARIAN') navigate('/librarian');
       else if (role === 'STUDENT') navigate('/student');
@@ -23,14 +22,14 @@ function Login() {
       setError(err.message);
     }
   };
+  
+  
+  
 
   return (
-    <div className="login-container">
-      {/* 🔹 Texto "Sistema Bibliotecario" agregado */}
-      <h1 className="library-title">Sistema Bibliotecario</h1>
-
-      <div className="login-box">
-        <h3>Iniciar Sesión</h3>
+    <div className="container d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div className="card p-4 shadow" style={{ width: '400px' }}>
+        <h3 className="text-center mb-4">Iniciar Sesión</h3>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
             <label className="form-label">Usuario</label>

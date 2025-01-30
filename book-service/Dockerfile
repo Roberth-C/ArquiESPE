@@ -1,6 +1,6 @@
-#Dockerfile for book-service
 FROM openjdk:21-jdk-slim
 WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 8082
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY wait-for-it.sh /app/wait-for-it.sh
+COPY target/book-service-0.0.1-SNAPSHOT.jar app.jar
+RUN chmod +x /app/wait-for-it.sh
+CMD ["/app/wait-for-it.sh", "database:5432", "--", "java", "-jar", "app.jar"]
